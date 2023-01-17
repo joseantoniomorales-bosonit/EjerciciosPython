@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.holaMundo),
+    path('parametro/<int:id>', views.parametros),
 ]
