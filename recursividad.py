@@ -111,32 +111,70 @@ def recursiva4(old_list, new_list,  last_id = None, last_parent = None):
     return recursiva4(old_list, new_list, element["id"], element["parent"])
 
 
+def recursiva(old_list, new_list, last_id=None, last_parent=None):
+    if len(old_list) <= 0:
+        return new_list
+
+    element = old_list.pop(0)
+
+    if last_parent is not element["parent"]:
+        # print("Padre distinto al anterior")
+
+        if last_id == element["parent"]:
+            # print("\t*Primer hijo")
+            if "childrens" not in new_list[-1]:
+                new_list[-1]["childrens"] = []
+                new_list[-1]["childrens"].append(element)
+            else:
+                new_list[-1]["childrens"][-1]["childrens"] = [element, *recursiva(old_list, [], element["id"], element["parent"])]
+        else:
+            # print("\t*Otro padre")
+            new_list.append(element)
+
+    else:
+        # print("El mismo padre")
+        if len(new_list) > 0 and "childrens" in new_list[-1]:
+            # print(new_list)
+            new_list[-1]["childrens"].append(element)
+        else:
+            new_list.append(element)
+
+    return recursiva(old_list, new_list, element["id"], element["parent"])
+
+
 lista_nodos = [
     {"id": 1, "name": "nodo1", "path": "nodo1", "parent": None},
     {"id": 2, "name": "subnodo1", "path": "nodo1/subnodo1", "parent": 1},
     {"id": 3, "name": "subnodo2", "path": "nodo1/subnodo2","parent": 1},
     {"id": 4, "name": "nodo2", "path": "/nodo2", "parent": None},
-    {"id": 5, "name": "subnodo3", "path": "/nodo2/subnodo3", "parent": 4},
-    {"id": 6, "name": "subnodo4", "path": "/nodo2/subnodo4", "parent": 4},
-    {"id": 7, "name": "subnodo5", "path": "/nodo2/subnodo5", "parent": 4},
-    {"id": 8, "name": "subnodo6", "path": "/nodo2/subnodo6", "parent": 4},
+    {"id": 5, "name": "subnodo3", "path": "/nodo2/subnodo1", "parent": 4},
+    {"id": 6, "name": "subnodo4", "path": "/nodo2/subnodo2", "parent": 4},
+    {"id": 7, "name": "subnodo5", "path": "/nodo2/subnodo3", "parent": 4},
+    {"id": 8, "name": "subnodo6", "path": "/nodo2/subnodo4", "parent": 4},
     {"id": 9, "name": "nodo3", "path": "nodo3/", "parent": None},
-    {"id": 10, "name": "subnodo7", "path": "nodo3/subnodo7", "parent": 9},
-    {"id": 11, "name": "subnodo7", "path": "nodo3/subnodo7", "parent": 9},
-    {"id": 12, "name": "subnodo8", "path": "nodo3/subnodo8", "parent": 9},
-    {"id": 13, "name": "subnodo9", "path": "nodo3/subnodo9", "parent": 9},
-    {"id": 14, "name": "subnodo10", "path": "nodo3/subnodo10", "parent": 9},
-    {"id": 15, "name": "subnodo11", "path": "nodo3/subnodo11", "parent": 9},
-    {"id": 16, "name": "subnodo12", "path": "nodo3/subnodo12", "parent": 9},
+    {"id": 10, "name": "subnodo7", "path": "nodo3/subnodo1", "parent": 9},
+    {"id": 11, "name": "subnodo7", "path": "nodo3/subnodo2", "parent": 9},
+    {"id": 12, "name": "subnodo8", "path": "nodo3/subnodo3", "parent": 9},
+    {"id": 13, "name": "subnodo9", "path": "nodo3/subnodo4", "parent": 9},
+    {"id": 14, "name": "subnodo10", "path": "nodo3/subnodo5", "parent": 9},
+    {"id": 15, "name": "subnodo11", "path": "nodo3/subnodo6", "parent": 9},
+    {"id": 16, "name": "subnodo12", "path": "nodo3/subnodo7", "parent": 9},
     {"id": 17, "name": "subsubnodo1", "path": "nodo3/subnodo12/subsubnodo1", "parent": 16},
     {"id": 18, "name": "subsubnodo2", "path": "nodo3/subnodo12/subsubnodo2", "parent": 16},
     {"id": 19, "name": "subsubnodo3", "path": "nodo3/subnodo12/subsubnodo3", "parent": 16},
     {"id": 20, "name": "subsubnodo4", "path": "nodo3/subnodo12/subsubnodo4", "parent": 16},
     {"id": 21, "name": "subsubnodo5", "path": "nodo3/subnodo12/subsubnodo5", "parent": 16},
-    {"id": 22, "name": "subsubnodo6", "path": "nodo3/subnodo12/subsubnodo6", "parent": 16}
+    {"id": 22, "name": "subsubnodo6", "path": "nodo3/subnodo12/subsubnodo6", "parent": 16},
+    {"id": 23, "name": "subsubnodo1", "path": "nodo3/subnodo12/subsubnodo6/subsubsubnodo1", "parent": 22},
+    {"id": 24, "name": "subsubnodo2", "path": "nodo3/subnodo12/subsubnodo6/subsubsubnodo2", "parent": 22},
+    {"id": 25, "name": "subsubnodo3", "path": "nodo3/subnodo12/subsubnodo6/subsubsubnodo3", "parent": 22},
+    {"id": 26, "name": "subsubnodo4", "path": "nodo3/subnodo12/subsubnodo6/subsubsubnodo4", "parent": 22},
+    {"id": 27, "name": "subsubnodo5", "path": "nodo3/subnodo12/subsubnodo6/subsubsubnodo5", "parent": 22},
+    {"id": 28, "name": "subsubnodo6", "path": "nodo3/subnodo12/subsubnodo6/subsubsubnodo6", "parent": 22}
 ]
-lista = recursiva4(lista_nodos, [])
+lista = recursiva(lista_nodos, [])
 print("-------------------------------")
 print("lista final")
+# print(lista)
 for l in lista:
     print(l)
